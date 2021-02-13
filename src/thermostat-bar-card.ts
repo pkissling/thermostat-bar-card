@@ -103,8 +103,12 @@ export class ThermostatBarCard extends LitElement {
           hasDoubleClick: hasAction(this.config.double_tap_action),
         })}
         tabindex="0"
-        .label=${`Thermostat Bar Card: ${this.config.entity || 'No Entity Defined'}`}
-      ></ha-card>
+        .label=${`Thermostat Bar Card: ${this.config.entities || 'No Entity Defined'}`}
+      >
+        <div>
+          ${this._createBars()}
+        </div>
+      </ha-card>
     `;
   }
 
@@ -131,6 +135,24 @@ export class ThermostatBarCard extends LitElement {
     return html`
       ${errorCard}
     `;
+  }
+
+  private _createBars(): TemplateResult[] {
+    if (!this.config.entities) {
+      return []
+    }
+
+    return this.config.entities
+      .map(entity => this._createBar(entity))
+  }
+
+  private _createBar(entity: string): TemplateResult {
+    const friendlyName = this.hass.states[entity].attributes['friendly_name']
+    return html`
+      <div>
+        ${friendlyName}
+      </div>
+    `
   }
 
   // https://lit-element.polymer-project.org/guide/styles
