@@ -32,7 +32,7 @@ const plugins = [
 
 export default [
   {
-    input: 'src/boilerplate-card.ts',
+    input: 'src/thermostat-bar-card.ts',
     output: {
       dir: 'dist',
       format: 'es',

@@ -1,4 +1,4 @@
-# Boilerplate Card by [@iantrich](https://www.github.com/iantrich)
+# Thermostat Bar Card by [@pkissling](https://www.github.com/pkissling)
 
 A community driven boilerplate of best practices for Home Assistant Lovelace custom cards
 

@@ -22,14 +22,14 @@ import {
 
 import './editor';
 
-import type { BoilerplateCardConfig } from './types';
+import type { ThermostatBarCardConfig } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 import { localize } from './localize/localize';
 
 /* eslint no-console: 0 */
 console.info(
-  `%c  BOILERPLATE-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
+  `%c  THERMOSTAT-BAR-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -37,16 +37,15 @@ console.info(
 // This puts your card into the UI card picker dialog
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
-  type: 'boilerplate-card',
-  name: 'Boilerplate Card',
-  description: 'A template custom card for you to create something awesome',
+  type: 'thermostat-bar-card',
+  name: 'Thermostat Bar Card',
+  description: 'A custom Lovelace card to monitor and control your thermostats',
 });
 
-// TODO Name your custom element
-@customElement('boilerplate-card')
-export class BoilerplateCard extends LitElement {
+@customElement('thermostat-bar-card')
+export class ThermostatBarCard extends LitElement {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
-    return document.createElement('boilerplate-card-editor');
+    return document.createElement('thermostat-bar-card-editor');
   }
 
   public static getStubConfig(): object {
@@ -56,10 +55,10 @@ export class BoilerplateCard extends LitElement {
   // TODO Add any properities that should cause your element to re-render here
   // https://lit-element.polymer-project.org/guide/properties
   @property({ attribute: false }) public hass!: HomeAssistant;
-  @internalProperty() private config!: BoilerplateCardConfig;
+  @internalProperty() private config!: ThermostatBarCardConfig;
 
   // https://lit-element.polymer-project.org/guide/properties#accessors-custom
-  public setConfig(config: BoilerplateCardConfig): void {
+  public setConfig(config: ThermostatBarCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
     if (!config) {
       throw new Error(localize('common.invalid_configuration'));
@@ -70,7 +69,7 @@ export class BoilerplateCard extends LitElement {
     }
 
     this.config = {
-      name: 'Boilerplate',
+      name: 'Thermostat Bar Card',
       ...config,
     };
   }
@@ -104,7 +103,7 @@ export class BoilerplateCard extends LitElement {
           hasDoubleClick: hasAction(this.config.double_tap_action),
         })}
         tabindex="0"
-        .label=${`Boilerplate: ${this.config.entity || 'No Entity Defined'}`}
+        .label=${`Thermostat Bar Card: ${this.config.entity || 'No Entity Defined'}`}
       ></ha-card>
     `;
   }
