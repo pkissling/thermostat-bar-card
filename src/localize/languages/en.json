@@ -1,8 +1,12 @@
 {
   "common": {
     "version": "Version",
-    "invalid_configuration": "Invalid configuration",
     "show_warning": "Show Warning",
     "show_error": "Show Error"
+  },
+  "validation": {
+    "invalid_configuration": "Invalid configuration",
+    "no_entities": "No entities passed",
+    "entity_not_exist": "Entity does not exist"
   }
 }

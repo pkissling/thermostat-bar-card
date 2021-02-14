@@ -1,4 +1,5 @@
 import { ActionConfig, LovelaceCard, LovelaceCardConfig, LovelaceCardEditor } from 'custom-card-helpers';
+import { HassEntityBase } from 'home-assistant-js-websocket/dist/types';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -9,12 +10,29 @@ declare global {
 
 export interface ThermostatBarCardConfig extends LovelaceCardConfig {
   type: string;
-  name?: string;
+  title?: string;
   show_warning?: boolean;
   show_error?: boolean;
   test_gui?: boolean;
-  entities?: string[];
+  entities?: TemperatureRow[];
+  min_temperature?: number;
+  max_temperature?: number;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   double_tap_action?: ActionConfig;
+}
+
+export declare type TemperatureRow = {
+  entity_id: string;
+  icon: string;
+}
+
+export declare type Climate = HassEntityBase & {
+  state: 'auto' | 'heat' | 'off';
+  attributes: {
+    temperature: number;
+    current_temperature: number;
+    hvac_action: 'heating' | 'idle';
+    unit_of_measurement?: string;
+  };
 }
