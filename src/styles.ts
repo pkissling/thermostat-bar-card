@@ -14,7 +14,20 @@ export const styles = html`
       display: flex;
       flex-grow: 1;
       height: 40px;
-      column-gap: 8px;
+    }
+
+    thermostat-bar-card-row > * {
+      margin-left: 6px;
+      margin-right: 6px;
+    }
+
+    thermostat-bar-card-row > :first-child {
+      margin-left: 0px;
+      margin-right: 6px;
+    }
+    thermostat-bar-card-row > :last-child {
+      margin-left: 6px;
+      margin-right: 0px;
     }
 
     thermostat-bar-card-icon {
@@ -28,19 +41,20 @@ export const styles = html`
 
     thermostat-bar-card-control {
       display: flex;
-      column-gap: 12px;
-      padding-left: 8px;
-      padding-right: 8px;
     }
 
     thermostat-bar-card-control-icon {
       cursor: pointer;
-      color: var(--icon-color, var(--paper-item-icon-color));
+      color: var(--paper-item-icon-color);
       display: flex;
       align-items: center;
       align-self: center;
       justify-content: center;
       position: relative;
+    }
+
+    thermostat-bar-card-control-icon + thermostat-bar-card-control-icon {
+      margin-left: 10px;
     }
 
     thermostat-bar-card-bar {
@@ -78,7 +92,7 @@ export const styles = html`
       width: 2px;
     }
     thermostat-bar-card-backgroundbar {
-      background: var(--primary-color);
+      background: var(--bar-color);
       filter: brightness(0.5);
       opacity: 0.25;
     }
@@ -108,7 +122,7 @@ export const styles = html`
 
     thermostat-bar-card-icon-indicator {
       display: flex;
-      color: var(--primary-color);
+      color: var(--icon-color);
       filter: brightness(0.8);
       margin-left: 12px;
     }

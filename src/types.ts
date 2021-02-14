@@ -1,4 +1,4 @@
-import { ActionConfig, LovelaceCard, LovelaceCardConfig, LovelaceCardEditor } from 'custom-card-helpers';
+import { LovelaceCard, LovelaceCardConfig, LovelaceCardEditor } from 'custom-card-helpers';
 import { HassEntityBase } from 'home-assistant-js-websocket/dist/types';
 
 declare global {
@@ -19,6 +19,7 @@ export interface ThermostatBarCardConfig extends LovelaceCardConfig {
 export declare type TemperatureRow = {
   entity_id: string;
   icon: string;
+  window_sensor: string;
 }
 
 export declare type Climate = HassEntityBase & {

@@ -126,6 +126,7 @@ export class ThermostatBarCard extends LitElement {
     const targetPercent = this.calculatePercentage(targetTemperature)
     const barColor = entity.state === 'off' ? 'var(--light-primary-color)' : 'var(--primary-color)'
     const isManualMode = entity.state === 'heat'
+    const isWindowOpen = this.isWindowOpen(row.window_sensor)
 
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
@@ -139,7 +140,9 @@ export class ThermostatBarCard extends LitElement {
           </thermostat-bar-card-icon>
 
         <thermostat-bar-card-bar>
-          <thermostat-bar-card-backgroundbar></thermostat-bar-card-backgroundbar>
+          <thermostat-bar-card-backgroundbar
+            style="--bar-color: ${barColor}"
+          ></thermostat-bar-card-backgroundbar>
           <thermostat-bar-card-currentbar
             style="--bar-percent: ${barPercent}%; --bar-color: ${barColor}"
           ></thermostat-bar-card-currentbar>
@@ -154,9 +157,12 @@ export class ThermostatBarCard extends LitElement {
             @action=${() => this.toggleHvacMode(entity)}
             .actionHandler=${actionHandler()}
           >
-            <thermostat-bar-card-icon-indicator>
+            <thermostat-bar-card-icon-indicator
+              style="--icon-color: ${barColor}"
+            >
               ${isHeating ? html`<ha-icon icon="mdi:fire"></ha-icon> `: '' }
               ${isManualMode ? html`<ha-icon icon="mdi:thermometer-alert"></ha-icon> `: '' }
+              ${isWindowOpen ? html`<ha-icon icon="mdi:window-open-variant"></ha-icon> `: '' }
             </thermostat-bar-card-icon-indicator>
             <thermostat-bar-card-text>
               ${temperatureText}
@@ -180,6 +186,13 @@ export class ThermostatBarCard extends LitElement {
         </thermostat-bar-card-control>
       </thermostat-bar-card-row>
       `
+  }
+  isWindowOpen(window_sensor?: string): boolean {
+    if (!window_sensor) {
+      return false
+    }
+
+    return this.hass.states[window_sensor]?.state === 'on'
   }
 
   private increaseTemperature(entity: Climate): void {
