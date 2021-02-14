@@ -7,7 +7,6 @@ import {
   property,
   CSSResult,
   TemplateResult,
-  css,
   PropertyValues,
   internalProperty,
 } from 'lit-element';
@@ -20,9 +19,8 @@ import {
 
 import './editor';
 import { styles } from './styles';
-import { DEFAULT_MIN_TEMPERATURE, DEFAULT_MAX_TEMPERATURE } from './constants'
 import type { Climate, TemperatureRow, ThermostatBarCardConfig } from './types';
-import { CARD_VERSION } from './const';
+import { CARD_VERSION, DEFAULT_MIN_TEMPERATURE, DEFAULT_MAX_TEMPERATURE } from './constants';
 import { localize } from './localize/localize';
 import { actionHandler } from './action-handler-directive';
 
