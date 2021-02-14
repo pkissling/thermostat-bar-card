@@ -18,7 +18,8 @@
     "runem.lit-plugin",
     "auchenberg.vscode-browser-preview",
     "davidanson.vscode-markdownlint",
-    "redhat.vscode-yaml"
+    "redhat.vscode-yaml",
+    "wix.vscode-import-cost"
   ],
   "settings": {
     "files.eol": "\n",
