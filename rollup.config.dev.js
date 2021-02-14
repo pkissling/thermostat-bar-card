@@ -22,7 +22,7 @@ export default {
     serve({
       contentBase: "./dist",
       host: "0.0.0.0",
-      port: 5000,
+      port: 6000,
       allowCrossOrigin: true,
       headers: {
         "Access-Control-Allow-Origin": "*",
