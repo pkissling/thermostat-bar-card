@@ -99,7 +99,6 @@ export class ThermostatBarCard extends LitElement {
           ${this._createBars()}
         </div>
       </ha-card>
-      ${styles}
     `;
   }
 
@@ -241,6 +240,6 @@ export class ThermostatBarCard extends LitElement {
 
   // https://lit-element.polymer-project.org/guide/styles
   static get styles(): CSSResult {
-    return css``;
+    return styles;
   }
 }
