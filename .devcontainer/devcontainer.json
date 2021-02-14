@@ -3,7 +3,9 @@
   "name": "Thermostat Bar Card Development",
   "dockerFile": "Dockerfile",
   "context": "..",
-  "appPort": ["6000:6000"],
+  "appPort": [
+    "4999:4999"
+  ],
   "postCreateCommand": "npm install",
   "runArgs": [
     "-v",
