@@ -86,14 +86,6 @@ export class ThermostatBarCard extends LitElement {
   // https://lit-element.polymer-project.org/guide/templates
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
-    if (this.config.show_warning) {
-      return this._showWarning(localize('common.show_warning'));
-    }
-
-    if (this.config.show_error) {
-      return this._showError(localize('common.show_error'));
-    }
-
     return html`
       <ha-card
         .header=${this.config.title}
@@ -103,42 +95,11 @@ export class ThermostatBarCard extends LitElement {
         <div
             id="states"
             class="card-content"
-            style="padding: 0px; flex-grow: 0; margin: 15px"
         >
           ${this._createBars()}
         </div>
       </ha-card>
       ${styles}
-    `;
-  }
-
-  private _handleAction(entity: Climate): void {
-
-    const hvacMode = entity.state === 'auto' ? 'off' : 'auto'
-    const serviceData = {
-      entity_id: entity.entity_id,
-      hvac_mode: hvacMode
-    };
-
-    this.hass.callService('climate', 'set_hvac_mode', serviceData);
-  }
-
-  private _showWarning(warning: string): TemplateResult {
-    return html`
-      <hui-warning>${warning}</hui-warning>
-    `;
-  }
-
-  private _showError(error: string): TemplateResult {
-    const errorCard = document.createElement('hui-error-card');
-    errorCard.setConfig({
-      type: 'error',
-      error,
-      origConfig: this.config,
-    });
-
-    return html`
-      ${errorCard}
     `;
   }
 
@@ -159,61 +120,65 @@ export class ThermostatBarCard extends LitElement {
     const targetTemperature = entity.attributes.temperature
     const currentTemperature = entity.attributes.current_temperature
 
-    const isHeating = entity.state !== 'off'
-    const barPercent = this._calculatePercentage(currentTemperature)
-    const targetPercent = this._calculatePercentage(targetTemperature)
-    const barColor = this._barColor(entity.state)
+    const isOn = entity.state !== 'off'
+    const isHeating = entity.attributes.hvac_action === 'heating';
+    const barPercent = this.calculatePercentage(currentTemperature)
+    const targetPercent = this.calculatePercentage(targetTemperature)
+    const barColor = entity.state === 'off' ? 'var(--light-primary-color)' : 'var(--primary-color)'
+    const isManualMode = entity.state === 'heat'
 
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
 
-    const heatingIndicator = this._heatingIndicator(entity.attributes.hvac_action)
-    const temperatureText = this._temperatureText(currentTemperature, targetTemperature, unitOfMeasurement, entity.state)
+    const temperatureText = this.temperatureText(currentTemperature, targetTemperature, unitOfMeasurement, entity.state)
 
     return html`
-      <bar-card-row>
-        <bar-card-card>
-          <bar-card-iconbar>
+      <thermostat-bar-card-row>
+          <thermostat-bar-card-icon>
             <ha-icon icon="${icon}"></ha-icon>
-          </bar-card-iconbar>
-          <bar-card-background>
-            <bar-card-backgroundbar></bar-card-backgroundbar>
-            <bar-card-currentbar
-              style="--bar-percent: ${barPercent}%; --bar-color: ${barColor}"
-            ></bar-card-currentbar>
+          </thermostat-bar-card-icon>
 
-            ${isHeating ? html`
-              <bar-card-targetbar
-                style="--bar-percent: ${targetBarStart}%; --bar-target-percent: ${targetBarEnd}%; --bar-color: ${barColor}"
-              ></bar-card-targetbar>
-              <bar-card-markerbar
-                style="--bar-target-percent: ${targetPercent}%; left: calc(${targetPercent}% - 1px); --bar-color: ${barColor}"
-              ></bar-card-markerbar>` : '' }
-            <bar-card-contentbar
-              @action=${() => this._handleAction(entity)}
-              .actionHandler=${actionHandler()}>
-              <bar-card-indicator>
-                ${heatingIndicator}
-              </bar-card-indicator>
-              <bar-card-value>
-                ${temperatureText}
-              </bar-card-value>
-            </bar-card-contentbar>
-          </bar-card-background>
-          <bar-card-iconbar
+        <thermostat-bar-card-bar>
+          <thermostat-bar-card-backgroundbar></thermostat-bar-card-backgroundbar>
+          <thermostat-bar-card-currentbar
+            style="--bar-percent: ${barPercent}%; --bar-color: ${barColor}"
+          ></thermostat-bar-card-currentbar>
+          ${isOn ? html`
+            <thermostat-bar-card-targetbar
+              style="--bar-percent: ${targetBarStart}%; --bar-target-percent: ${targetBarEnd}%; --bar-color: ${barColor}"
+            ></thermostat-bar-card-targetbar>
+            <thermostat-bar-card-markerbar
+              style="--bar-target-percent: ${targetPercent}%; left: calc(${targetPercent}% - 1px); --bar-color: ${barColor}"
+            ></thermostat-bar-card-markerbar>` : '' }
+          <thermostat-bar-card-textcontent
+            @action=${() => this.toggleHvacMode(entity)}
+            .actionHandler=${actionHandler()}
+          >
+            <thermostat-bar-card-icon-indicator>
+              ${isHeating ? html`<ha-icon icon="mdi:fire"></ha-icon> `: '' }
+              ${isManualMode ? html`<ha-icon icon="mdi:thermometer-alert"></ha-icon> `: '' }
+            </thermostat-bar-card-icon-indicator>
+            <thermostat-bar-card-text>
+              ${temperatureText}
+            </thermostat-bar-card-text>
+          </thermostat-bar-card-textcontent>
+        </thermostat-bar-card-bar>
+
+        <thermostat-bar-card-control>
+          <thermostat-bar-card-control-icon
             @action=${() => this.decreaseTemperature(entity)}
             .actionHandler=${actionHandler()}
           >
             <ha-icon icon="mdi:thermometer-minus"></ha-icon>
-          </bar-card-iconbar>
-          <bar-card-iconbar
+          </thermostat-bar-card-control-icon>
+          <thermostat-bar-card-control-icon
             @action=${() => this.increaseTemperature(entity)}
             .actionHandler=${actionHandler()}
           >
             <ha-icon icon="mdi:thermometer-plus"></ha-icon>
-          </bar-card-iconbar>
-        </bar-card-card>
-      </bar-card-row>
+          </thermostat-bar-card-control-icon>
+        </thermostat-bar-card-control>
+      </thermostat-bar-card-row>
       `
   }
 
@@ -234,7 +199,7 @@ export class ThermostatBarCard extends LitElement {
     this.hass.callService('climate', 'set_temperature', serviceData);
   }
 
-  private _temperatureText(currentTemperature: number, targetTemperature: number, unit: string, state: 'heat' | 'auto' | 'off'): string {
+  private temperatureText(currentTemperature: number, targetTemperature: number, unit: string, state: 'heat' | 'auto' | 'off'): string {
     const currentRounded = Math.round(currentTemperature);
     if (state === 'off') {
       return `${currentRounded} ${unit}`
@@ -243,32 +208,22 @@ export class ThermostatBarCard extends LitElement {
     return `${targetTemperature} ${unit}`
   }
 
-  private _barColor(state: 'heat' | 'auto' | 'off'): string {
-    switch (state) {
-      case 'auto':
-        return 'var(--primary-color)'
-      case 'off':
-        return 'var(--light-primary-color)'
-      case 'heat':
-        return '#ff8c8a'
-    }
-  }
-
-  private _calculatePercentage(value: number): number {
+  private calculatePercentage(value: number): number {
     const minTemperature = this.config.min_temperature || DEFAULT_MIN_TEMPERATURE
     const maxTemperature = this.config.max_temperature || DEFAULT_MAX_TEMPERATURE
 
     return (100 * (value - minTemperature)) / (maxTemperature - minTemperature)
   }
 
-  private _heatingIndicator(hvacAction: 'heating' | 'idle'): TemplateResult | undefined {
-    if (hvacAction !== 'heating') {
-      return undefined
-    }
+  private toggleHvacMode(entity: Climate): void {
 
-    return html`
-      <ha-icon icon="mdi:fire"></ha-icon>
-    `;
+    const hvacMode = entity.state === 'auto' ? 'off' : 'auto'
+    const serviceData = {
+      entity_id: entity.entity_id,
+      hvac_mode: hvacMode
+    };
+
+    this.hass.callService('climate', 'set_hvac_mode', serviceData);
   }
 
   // https://lit-element.polymer-project.org/guide/styles

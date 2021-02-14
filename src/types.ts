@@ -11,15 +11,9 @@ declare global {
 export interface ThermostatBarCardConfig extends LovelaceCardConfig {
   type: string;
   title?: string;
-  show_warning?: boolean;
-  show_error?: boolean;
-  test_gui?: boolean;
   entities?: TemperatureRow[];
   min_temperature?: number;
   max_temperature?: number;
-  tap_action?: ActionConfig;
-  hold_action?: ActionConfig;
-  double_tap_action?: ActionConfig;
 }
 
 export declare type TemperatureRow = {
