@@ -10,9 +10,10 @@ import {
   PropertyValues,
   internalProperty,
 } from 'lit-element';
+import { hasConfigOrEntitiesChanged} from './helpers';
+
 import {
   HomeAssistant,
-  hasConfigOrEntityChanged,
   LovelaceCardEditor,
   getLovelace,
 } from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types
@@ -73,12 +74,7 @@ export class ThermostatBarCard extends LitElement {
 
   // https://lit-element.polymer-project.org/guide/lifecycle#shouldupdate
   protected shouldUpdate(changedProps: PropertyValues): boolean {
-    if (!this.config) {
-      return false;
-    }
-
-    return true
-    return hasConfigOrEntityChanged(this, changedProps, false);
+    return hasConfigOrEntitiesChanged(this.hass, this.config, changedProps);
   }
 
   // https://lit-element.polymer-project.org/guide/templates
