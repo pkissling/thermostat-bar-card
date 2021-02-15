@@ -126,5 +126,10 @@ export const styles = css`
     filter: brightness(0.8);
     margin-left: 12px;
   }
+
+  thermostat-bar-card-flip {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
 `
 export default styles;

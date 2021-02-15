@@ -124,7 +124,8 @@ export class ThermostatBarCard extends LitElement {
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
 
-    const temperatureText = this.temperatureText(currentTemperature, targetTemperature, unitOfMeasurement, entity.state)
+    const temperatureText = isOn ? `${currentTemperature} ${unitOfMeasurement}` : ''
+    const targetTemperatureText = `${Math.round(targetTemperature)} ${unitOfMeasurement}`
 
     return html`
       <thermostat-bar-card-row>
@@ -168,7 +169,12 @@ export class ThermostatBarCard extends LitElement {
             @action=${() => this.decreaseTemperature(entity)}
             .actionHandler=${actionHandler()}
           >
-            <ha-icon icon="mdi:thermometer-minus"></ha-icon>
+            <thermostat-bar-card-flip>
+              <ha-icon icon="mdi:thermometer-minus"></ha-icon>
+            </thermostat-bar-card-flip>
+          </thermostat-bar-card-control-icon>
+          <thermostat-bar-card-control-icon>
+            ${targetTemperatureText}
           </thermostat-bar-card-control-icon>
           <thermostat-bar-card-control-icon
             @action=${() => this.increaseTemperature(entity)}
@@ -203,15 +209,6 @@ export class ThermostatBarCard extends LitElement {
     };
 
     this.hass.callService('climate', 'set_temperature', serviceData);
-  }
-
-  private temperatureText(currentTemperature: number, targetTemperature: number, unit: string, state: 'heat' | 'auto' | 'off'): string {
-    const currentRounded = Math.round(currentTemperature);
-    if (state === 'off') {
-      return `${currentRounded} ${unit}`
-    }
-
-    return `${targetTemperature} ${unit}`
   }
 
   private calculatePercentage(value: number): number {
