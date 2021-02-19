@@ -124,7 +124,7 @@ export class ThermostatBarCard extends LitElement {
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
 
-    const temperatureText = isOn ? `${currentTemperature} ${unitOfMeasurement}` : ''
+    const temperatureText = `${currentTemperature} ${unitOfMeasurement}`
     const targetTemperatureText = `${Math.round(targetTemperature)} ${unitOfMeasurement}`
 
     return html`
@@ -173,8 +173,14 @@ export class ThermostatBarCard extends LitElement {
               <ha-icon icon="mdi:thermometer-minus"></ha-icon>
             </thermostat-bar-card-flip>
           </thermostat-bar-card-control-icon>
-          <thermostat-bar-card-control-icon>
-            ${targetTemperatureText}
+          <thermostat-bar-card-control-icon
+            @action=${() => this.toggleHvacMode(entity)}
+            .actionHandler=${actionHandler()}
+          >
+            ${isOn ?
+              html`${targetTemperatureText}`
+              : html`<ha-icon icon="mdi:power"></ha-icon>`
+            }
           </thermostat-bar-card-control-icon>
           <thermostat-bar-card-control-icon
             @action=${() => this.increaseTemperature(entity)}

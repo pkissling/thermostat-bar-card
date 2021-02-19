@@ -51,6 +51,7 @@ export const styles = css`
     align-self: center;
     justify-content: center;
     position: relative;
+    width: 35px;
   }
 
   thermostat-bar-card-control-icon + thermostat-bar-card-control-icon {
