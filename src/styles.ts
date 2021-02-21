@@ -51,7 +51,10 @@ export const styles = css`
     align-self: center;
     justify-content: center;
     position: relative;
-    width: 35px;
+
+    .fixed-width {
+      width: 35px;
+    }
   }
 
   thermostat-bar-card-control-icon + thermostat-bar-card-control-icon {
@@ -92,6 +95,7 @@ export const styles = css`
     height: 100%;
     width: 2px;
   }
+
   thermostat-bar-card-backgroundbar {
     background: var(--bar-color);
     filter: brightness(0.5);
@@ -119,6 +123,7 @@ export const styles = css`
   thermostat-bar-card-text {
     margin: 12px;
     margin-left: auto;
+    opacity: 0.7;
   }
 
   thermostat-bar-card-icon-indicator {

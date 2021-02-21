@@ -174,6 +174,7 @@ export class ThermostatBarCard extends LitElement {
             </thermostat-bar-card-flip>
           </thermostat-bar-card-control-icon>
           <thermostat-bar-card-control-icon
+            class="fixed-width"
             @action=${() => this.toggleHvacMode(entity)}
             .actionHandler=${actionHandler()}
           >
