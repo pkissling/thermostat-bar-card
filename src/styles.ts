@@ -10,6 +10,10 @@ export const styles = css`
     margin-bottom: 0px;
   }
 
+  .fixed-width {
+    width: 35px;
+  }
+
   thermostat-bar-card-row {
     display: flex;
     flex-grow: 1;
@@ -51,10 +55,6 @@ export const styles = css`
     align-self: center;
     justify-content: center;
     position: relative;
-
-    .fixed-width {
-      width: 35px;
-    }
   }
 
   thermostat-bar-card-control-icon + thermostat-bar-card-control-icon {
