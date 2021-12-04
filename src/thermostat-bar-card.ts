@@ -8,7 +8,7 @@ import {
   CSSResult,
   TemplateResult,
   PropertyValues,
-  internalProperty,
+  state
 } from 'lit-element';
 import { hasConfigOrEntitiesChanged} from './helpers';
 
@@ -53,7 +53,7 @@ export class ThermostatBarCard extends LitElement {
   // TODO Add any properities that should cause your element to re-render here
   // https://lit-element.polymer-project.org/guide/properties
   @property({ attribute: false }) public hass!: HomeAssistant;
-  @internalProperty() private config!: ThermostatBarCardConfig;
+  @state() private config!: ThermostatBarCardConfig;
 
   // https://lit-element.polymer-project.org/guide/properties#accessors-custom
   public setConfig(config: ThermostatBarCardConfig): void {
