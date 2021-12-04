@@ -26,8 +26,10 @@ export function hasConfigOrEntitiesChanged(hass: HomeAssistant, config: Thermost
         return false
     }
 
-    // check if one of the configured entities has outdated attributes
-    return config.entities.map(e => hass.states[e.entity_id])
+    // check if one of the provided entity_ids has outdated attributes
+    return config.entities
+        .flatMap(entity => Object.values(entity))
+        .map(entityId => hass.states[entityId])
         .filter(e => e !== undefined)
         .some(e => e !== oldHass.states[e.entity_id])
 }
