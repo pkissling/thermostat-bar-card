@@ -11,7 +11,7 @@ export const styles = css`
   }
 
   .fixed-width {
-    width: 35px;
+    width: 36px;
   }
 
   thermostat-bar-card-row {

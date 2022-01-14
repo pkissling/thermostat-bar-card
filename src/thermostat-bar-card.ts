@@ -110,10 +110,12 @@ export class ThermostatBarCard extends LitElement {
     const icon = row.icon
 
     const unitOfMeasurement = entity.attributes.unit_of_measurement || '°C'
-    const targetTemperature = entity.attributes.temperature
-    const currentTemperature = entity.attributes.current_temperature
+    const targetTemperature = entity.attributes.temperature || 0
+    const currentTemperature = entity.attributes.current_temperature || 0
 
-    const isOn = entity.state !== 'off'
+    const isOn = entity.state === 'heat' || entity.state === 'auto'
+    const isDisconnected = entity.state === 'unavailable'
+
     const isHeating = entity.attributes.hvac_action === 'heating';
     const barPercent = this.calculatePercentage(currentTemperature)
     const targetPercent = this.calculatePercentage(targetTemperature)
@@ -124,8 +126,8 @@ export class ThermostatBarCard extends LitElement {
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
 
-    const temperatureText = `${currentTemperature} ${unitOfMeasurement}`
-    const targetTemperatureText = `${Math.round(targetTemperature)} ${unitOfMeasurement}`
+    const temperatureText = `${this.currentTempAsText(currentTemperature)} ${unitOfMeasurement}`
+    const targetTemperatureText = `${this.currentTempAsText(targetTemperature)} °`
 
     return html`
       <thermostat-bar-card-row>
@@ -178,7 +180,7 @@ export class ThermostatBarCard extends LitElement {
             @action=${() => this.toggleHvacMode(entity)}
             .actionHandler=${actionHandler()}
           >
-            ${isOn ?
+            ${isOn || isDisconnected ?
               html`${targetTemperatureText}`
               : html`<ha-icon icon="mdi:power"></ha-icon>`
             }
@@ -193,7 +195,15 @@ export class ThermostatBarCard extends LitElement {
       </thermostat-bar-card-row>
       `
   }
-  isWindowOpen(window_sensor?: string): boolean {
+
+  private currentTempAsText(temp: number): string {
+    if (temp == 0) {
+      return '-'
+    }
+    return temp.toFixed(1)
+  }
+
+  private isWindowOpen(window_sensor?: string): boolean {
     if (!window_sensor) {
       return false
     }
@@ -202,11 +212,11 @@ export class ThermostatBarCard extends LitElement {
   }
 
   private increaseTemperature(entity: Climate): void {
-    this.changeTemperatureBy(entity, 1)
+    this.changeTemperatureBy(entity, 0.5)
   }
 
   private decreaseTemperature(entity: Climate): void {
-    this.changeTemperatureBy(entity, -1)
+    this.changeTemperatureBy(entity, -0.5)
   }
 
   private changeTemperatureBy(entity: Climate, diff: number): void {

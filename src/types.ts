@@ -23,7 +23,7 @@ export declare type TemperatureRow = {
 }
 
 export declare type Climate = HassEntityBase & {
-  state: 'auto' | 'heat' | 'off';
+  state: 'auto' | 'heat' | 'off' | 'unavailable';
   attributes: {
     temperature: number;
     current_temperature: number;
