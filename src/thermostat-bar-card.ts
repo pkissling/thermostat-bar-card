@@ -125,6 +125,7 @@ export class ThermostatBarCard extends LitElement {
 
     const targetBarStart = (currentTemperature < targetTemperature) ? barPercent : targetPercent
     const targetBarEnd = (currentTemperature < targetTemperature) ? targetPercent : barPercent
+    const showMarkerBar = isOn && targetPercent > 0 && targetPercent < 100
 
     const temperatureText = `${this.currentTempAsText(currentTemperature)} ${unitOfMeasurement}`
     const targetTemperatureText = `${this.currentTempAsText(targetTemperature)} °`
@@ -145,7 +146,8 @@ export class ThermostatBarCard extends LitElement {
           ${isOn ? html`
             <thermostat-bar-card-targetbar
               style="--bar-percent: ${targetBarStart}%; --bar-target-percent: ${targetBarEnd}%; --bar-color: ${barColor}"
-            ></thermostat-bar-card-targetbar>
+            ></thermostat-bar-card-targetbar>` : '' }
+          ${showMarkerBar ? html`
             <thermostat-bar-card-markerbar
               style="--bar-target-percent: ${targetPercent}%; left: calc(${targetPercent}% - 1px); --bar-color: ${barColor}"
             ></thermostat-bar-card-markerbar>` : '' }
