@@ -42,6 +42,11 @@ console.info(
 
 @customElement('thermostat-bar-card')
 export class ThermostatBarCard extends LitElement {
+  // TODO Add any properities that should cause your element to re-render here
+  // https://lit-element.polymer-project.org/guide/properties
+  @property({ attribute: false }) public hass!: HomeAssistant;
+  @state() private config!: ThermostatBarCardConfig;
+
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
     return document.createElement('thermostat-bar-card-editor');
   }
@@ -50,10 +55,9 @@ export class ThermostatBarCard extends LitElement {
     return {};
   }
 
-  // TODO Add any properities that should cause your element to re-render here
-  // https://lit-element.polymer-project.org/guide/properties
-  @property({ attribute: false }) public hass!: HomeAssistant;
-  @state() private config!: ThermostatBarCardConfig;
+  public getCardSize(): number {
+    return this.config.entities?.length ?? 0
+  }
 
   // https://lit-element.polymer-project.org/guide/properties#accessors-custom
   public setConfig(config: ThermostatBarCardConfig): void {
